@@ -152,6 +152,10 @@ void RNSkDrawView::drawInCanvas(std::shared_ptr<JsiSkCanvas> canvas,
   }
 }
 
+sk_sp<SkPicture> RNSkDrawView::getPicture() {
+  return std::move(_lastPicture);
+}
+
 sk_sp<SkImage> RNSkDrawView::makeImageSnapshot(std::shared_ptr<SkRect> bounds) {
   // Assert width/height
   auto surface = SkSurface::MakeRasterN32Premul(getScaledWidth(), getScaledHeight());
@@ -202,7 +206,7 @@ void RNSkDrawView::performDraw() {
   }
   
   // Finish drawing operations
-  auto p = recorder.finishRecordingAsPicture();
+  _lastPicture = std::move(recorder.finishRecordingAsPicture());
   
   // Calculate duration
   _jsTimingInfo.stopTiming();
@@ -212,7 +216,7 @@ void RNSkDrawView::performDraw() {
     // Post drawing message to the render thread where the picture recorded
     // will be sent to the GPU/backend for rendering to screen.
     auto gpuLock = _gpuDrawingLock;
-    _platformContext->runOnRenderThread([weakSelf = weak_from_this(), p = std::move(p), gpuLock]() {
+    _platformContext->runOnRenderThread([weakSelf = weak_from_this(), p = std::move(_lastPicture), gpuLock]() {
       auto self = weakSelf.lock();
       if (self) {
         // Draw the picture recorded on the real GPU canvas

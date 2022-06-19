@@ -39,6 +39,14 @@ export class SkiaView extends React.Component<SkiaViewProps> {
   }
 
   /**
+   * Returns the last drawn picture. This is useful for debugging.
+   */
+  public getPicture() {
+    assertDrawCallbacksEnabled();
+    return SkiaViewApi.getPicture(this._nativeId);
+  }
+
+  /**
    * Creates a snapshot from the canvas in the surface
    * @param rect Rect to use as bounds. Optional.
    * @returns An Image object.

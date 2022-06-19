@@ -1,6 +1,6 @@
 import type { ViewProps } from "react-native";
 
-import type { SkImage, SkRect, SkCanvas } from "../skia/types";
+import type { SkImage, SkRect, SkCanvas, SkPicture } from "../skia/types";
 import type { SkiaValue } from "../values";
 
 export type DrawMode = "continuous" | "default";
@@ -69,6 +69,7 @@ export interface ISkiaViewApi {
     nativeId: number,
     values: SkiaValue<unknown>[]
   ) => () => void;
+  getPicture: (nativeId: number) => SkPicture;
 }
 
 export interface SkiaViewProps extends ViewProps {

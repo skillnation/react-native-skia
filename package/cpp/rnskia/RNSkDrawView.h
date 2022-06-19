@@ -93,6 +93,12 @@ public:
    */
   sk_sp<SkImage> makeImageSnapshot(std::shared_ptr<SkRect> bounds);
 
+
+  /**
+   Returns the current drawing as an SkPicture
+   */
+  sk_sp<SkPicture> getPicture();
+
 protected:
   /**
    Returns the scaled width of the view
@@ -206,7 +212,11 @@ private:
    * Native id
    */
   size_t _nativeId;
-  
+
+  /**
+   * Last known SkPicture
+   */
+  sk_sp<SkPicture> _lastPicture;
 };
 
 } // namespace RNSkia
