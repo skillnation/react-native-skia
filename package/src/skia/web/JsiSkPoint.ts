@@ -2,9 +2,12 @@ import type { CanvasKit, Point } from "canvaskit-wasm";
 
 import type { SkPoint } from "../types";
 
-import { HostObject } from "./Host";
+import { BaseHostObject } from "./Host";
 
-export class JsiSkPoint extends HostObject<Point, "Point"> implements SkPoint {
+export class JsiSkPoint
+  extends BaseHostObject<Point, "Point">
+  implements SkPoint
+{
   constructor(CanvasKit: CanvasKit, ref: Point) {
     super(CanvasKit, ref, "Point");
   }

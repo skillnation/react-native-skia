@@ -2,10 +2,10 @@ import type { CanvasKit } from "canvaskit-wasm";
 
 import type { FontStyle, SkFontMgr, SkTypeface } from "../types";
 
-import { HostObject } from "./Host";
+import { BaseHostObject } from "./Host";
 
 export class JsiSkFontMgr
-  extends HostObject<null, "FontMgr">
+  extends BaseHostObject<null, "FontMgr">
   implements SkFontMgr
 {
   constructor(CanvasKit: CanvasKit) {

@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import type { CanvasKit, EmbindEnumEntity } from "canvaskit-wasm";
+import type { CanvasKit, EmbindEnumEntity, EmbindObject } from "canvaskit-wasm";
 
 import type { SkJSIInstance } from "../types";
 
@@ -17,7 +17,7 @@ export abstract class Host {
   }
 }
 
-export abstract class HostObject<T, N extends string>
+export abstract class BaseHostObject<T, N extends string>
   extends Host
   implements SkJSIInstance<N>
 {
@@ -28,6 +28,19 @@ export abstract class HostObject<T, N extends string>
     super(CanvasKit);
     this.ref = ref;
     this.__typename__ = typename;
+  }
+}
+
+export abstract class HostObject<
+  T extends EmbindObject<T>,
+  N extends string
+> extends BaseHostObject<T, N> {
+  constructor(CanvasKit: CanvasKit, ref: T, typename: N) {
+    super(CanvasKit, ref, typename);
+  }
+
+  delete() {
+    this.ref.delete();
   }
 }
 
@@ -47,7 +60,7 @@ export const toNullableValue = <T>(value: NonNullish | null): T | null =>
   value === null ? null : toValue(value);
 
 export const toValue = <T>(value: NonNullish): T =>
-  (value as HostObject<T, string>).ref;
+  (value as BaseHostObject<T, string>).ref;
 
 export const ckEnum = (value: number): EmbindEnumEntity => ({ value });
 export const optEnum = (

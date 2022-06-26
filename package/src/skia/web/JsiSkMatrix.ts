@@ -2,10 +2,10 @@ import type { CanvasKit, Matrix3x3 } from "canvaskit-wasm";
 
 import type { SkMatrix } from "../types";
 
-import { HostObject, toValue } from "./Host";
+import { BaseHostObject, toValue } from "./Host";
 
 export class JsiSkMatrix
-  extends HostObject<Matrix3x3, "Matrix">
+  extends BaseHostObject<Matrix3x3, "Matrix">
   implements SkMatrix
 {
   constructor(CanvasKit: CanvasKit, ref: Matrix3x3) {
