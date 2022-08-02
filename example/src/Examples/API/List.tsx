@@ -19,6 +19,10 @@ const examples = [
     title: "▶️ Skottie",
   },
   {
+    screen: "RNLottie",
+    title: "▶️ RN Lottie",
+  },
+  {
     screen: "Clipping",
     title: "✂️ & 🎭 Clipping & Masking",
   },

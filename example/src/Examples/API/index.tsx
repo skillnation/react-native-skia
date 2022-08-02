@@ -21,6 +21,7 @@ import { FreezeExample } from "./Freeze";
 import { Touch } from "./Touch";
 import { Reanimated } from "./Reanimated";
 import { SkottieAnimations } from "./SkottieAnimations";
+import { RNLottieAnimations } from "./RNLottieAnimations";
 
 const Stack = createNativeStackNavigator<Routes>();
 export const API = () => {
@@ -46,6 +47,13 @@ export const API = () => {
         component={SkottieAnimations}
         options={{
           title: "▶️ Skottie (lottie animations)",
+        }}
+      />
+      <Stack.Screen
+        name="RNLottie"
+        component={RNLottieAnimations}
+        options={{
+          title: "▶️ RN Lottie",
         }}
       />
       <Stack.Screen
