@@ -6,6 +6,8 @@
 #pragma clang diagnostic ignored "-Wdocumentation"
 
 #include <modules/skottie/include/Skottie.h>
+#include <SkBitmap.h>
+#include <map>
 
 #pragma clang diagnostic pop
 
@@ -17,6 +19,10 @@ namespace RNSkia {
 
     class JsiSkSkottieAnimation : public JsiSkWrappingSkPtrHostObject<skottie::Animation>
     {
+    private:
+        std::map<int, SkBitmap*> fBitmaps;
+        int currentFrame;
+
     public:
         //#region Properties
         JSI_PROPERTY_GET(duration) { return static_cast<double>(getObject()->duration()); }
@@ -29,15 +35,42 @@ namespace RNSkia {
 
         //#region Methods
         JSI_HOST_FUNCTION(seek) {
-            getObject()->seek(arguments[0].asNumber());
+            auto progress = arguments[0].asNumber();
+            getObject()->seek(progress);
+            
+            auto totalFrameCount = getObject()->duration() * getObject()->fps();
+            currentFrame = totalFrameCount * progress;
+
             return jsi::Value::undefined();
         }
 
         JSI_HOST_FUNCTION(render) {
             auto canvas = JsiSkCanvas::fromValue(runtime, arguments[0]);
             auto rect = JsiSkRect::fromValue(runtime, arguments[1]);
-            if (canvas != nullptr && rect != nullptr)
-                getObject()->render(canvas, rect.get());
+
+            auto bitmap = fBitmaps[currentFrame];
+            if (bitmap == nullptr) {
+                // FIXME: result is blurred!
+                bitmap = new SkBitmap();
+                auto success = bitmap->tryAllocPixels(
+                        SkImageInfo::Make(rect->width(), rect->height(),
+                                          SkColorType::kRGBA_8888_SkColorType,
+                                          SkAlphaType::kPremul_SkAlphaType)
+                );
+                if (!success) {
+                    // just render the frame out regularly
+                    getObject()->render(canvas, rect.get());
+                    return jsi::Value::undefined();
+                }
+
+                auto _canvas = new SkCanvas(*bitmap);
+                getObject()->render(_canvas, rect.get());
+                bitmap->setImmutable(); // perf optimization for asImage
+                fBitmaps[currentFrame] = bitmap;
+            }
+
+            canvas->drawImage(bitmap->asImage(), 0, 0);
+            // TODO: check if faster/easier: canvas->getSurface()->makeImageSnapshot();
 
             return jsi::Value::undefined();
         }
