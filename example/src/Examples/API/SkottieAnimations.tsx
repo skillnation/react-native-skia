@@ -8,9 +8,13 @@ import {
   Easing,
 } from "@shopify/react-native-skia";
 
-import _LottieAnim from "../../assets/trophy_anim.json";
+import _TrophyAnim from "../../assets/trophy_anim.json";
+import _MobileAnim from "../../assets/114273-mobile.json";
+import _BicycleAnim from "../../assets/1735-animated-indonesian-first-president.json";
 
-const LottieAnim = JSON.stringify(_LottieAnim);
+const TrophyAnim = JSON.stringify(_TrophyAnim);
+const MobileAnim = JSON.stringify(_MobileAnim);
+const BicycleAnim = JSON.stringify(_BicycleAnim);
 
 export const SkottieAnimations = () => {
   const { width, height } = useWindowDimensions();
@@ -23,34 +27,74 @@ export const SkottieAnimations = () => {
   }, []);
 
   // TODO: build a hook that abstracts this logic
-  const skottieAnimation = useMemo(() => Skia.SkottieAnimation(LottieAnim), []);
+  const trophyAnim = useMemo(() => Skia.SkottieAnimation(TrophyAnim), []);
+  const mobileAnim = useMemo(() => Skia.SkottieAnimation(MobileAnim), []);
+  const bicycleAnim = useMemo(() => Skia.SkottieAnimation(BicycleAnim), []);
 
-  const progress = useTiming(
+  const progressTrophy = useTiming(
     {
       from: 0,
       to: 1,
       loop: true,
     },
     {
-      duration: skottieAnimation.duration * 1000,
+      duration: trophyAnim.duration * 1000,
       easing: Easing.linear,
     }
   );
+  // const progressMobile = useTiming(
+  //   {
+  //     from: 0,
+  //     to: 1,
+  //     loop: true,
+  //   },
+  //   {
+  //     duration: mobileAnim.duration * 1000,
+  //     easing: Easing.linear,
+  //   }
+  // );
+  // const progressBicycle = useTiming(
+  //   {
+  //     from: 0,
+  //     to: 1,
+  //     loop: true,
+  //   },
+  //   {
+  //     duration: bicycleAnim.duration * 1000,
+  //     easing: Easing.linear,
+  //   }
+  // );
 
   return (
     <View>
-      {isRender && (
-        <Canvas style={{ width, height }}>
-          <SkottieAnimation
-            x={0}
-            y={0}
-            width={width}
-            height={height}
-            progress={progress}
-            anim={skottieAnimation}
-          />
-        </Canvas>
-      )}
+      {/*{isRender && (*/}
+      <Canvas style={{ width, height }} debug={true}>
+        {/*<SkottieAnimation*/}
+        {/*  x={0}*/}
+        {/*  y={0}*/}
+        {/*  width={width}*/}
+        {/*  height={height}*/}
+        {/*  progress={progressTrophy}*/}
+        {/*  anim={trophyAnim}*/}
+        {/*/>*/}
+        {/*<SkottieAnimation*/}
+        {/*  x={0}*/}
+        {/*  y={0}*/}
+        {/*  width={width}*/}
+        {/*  height={height}*/}
+        {/*  progress={progressBicycle}*/}
+        {/*  anim={bicycleAnim}*/}
+        {/*/>*/}
+        {/*<SkottieAnimation*/}
+        {/*  x={0}*/}
+        {/*  y={0}*/}
+        {/*  width={width}*/}
+        {/*  height={height}*/}
+        {/*  progress={progressMobile}*/}
+        {/*  anim={mobileAnim}*/}
+        {/*/>*/}
+      </Canvas>
+      {/*)}*/}
     </View>
   );
 };
