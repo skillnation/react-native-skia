@@ -1,47 +1,66 @@
-import React, { useMemo } from "react";
-import { ScrollView, useWindowDimensions } from "react-native";
+import React, { useEffect, useMemo } from "react";
+import { useWindowDimensions } from "react-native";
 import {
-  Canvas,
   Skia,
-  SkottieAnimation,
-  useTiming,
-  Easing,
+  SkiaView,
+  useDrawCallback,
+  useClockValue,
+  useComputedValue,
 } from "@shopify/react-native-skia";
 
 import _LottieAnim from "../../assets/material_wave_loading.json";
-
 const LottieAnim = JSON.stringify(_LottieAnim);
+
+const fibonacci = (num: number) => {
+  let a = 1,
+    b = 0,
+    temp;
+
+  while (num >= 0) {
+    temp = a;
+    a = a + b;
+    b = temp;
+    num--;
+  }
+
+  return b;
+};
+
+export const useMakeJsThreadBusy = () =>
+  useEffect(() => {
+    setInterval(() => {
+      console.log("JS thread is busy now");
+      while (true) {
+        fibonacci(10000);
+      }
+    }, 2000);
+  }, []);
 
 export const SkottieAnimations = () => {
   const { width, height } = useWindowDimensions();
 
-  // TODO: build a hook that abstracts this logic
-  const skottieAnimation = useMemo(() => Skia.SkottieAnimation(LottieAnim), []);
+  useMakeJsThreadBusy();
 
-  const progress = useTiming(
-    {
-      from: 0,
-      to: 1,
-      loop: true,
+  const skottieAnimation = useMemo(() => Skia.SkottieAnimation(LottieAnim), []);
+  const clock = useClockValue();
+  const progressValue = useComputedValue(() => {
+    "worklet";
+    const c = clock;
+    return (c.current / (skottieAnimation.duration * 1000)) % 1;
+  }, [clock]);
+
+  const onDraw = useDrawCallback(
+    (canvas) => {
+      "worklet";
+
+      const p = progressValue;
+      skottieAnimation.seek(p.current);
+      skottieAnimation.render(canvas, Skia.XYWHRect(0, 0, width, height));
     },
-    {
-      duration: skottieAnimation.duration * 1000,
-      easing: Easing.linear,
-    }
+    [progressValue]
   );
 
   return (
-    <ScrollView>
-      <Canvas style={{ width, height }}>
-        <SkottieAnimation
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          progress={progress}
-          anim={skottieAnimation}
-        />
-      </Canvas>
-    </ScrollView>
+    <SkiaView mode="continuous" style={{ width, height }} onDraw={onDraw} />
   );
 };
