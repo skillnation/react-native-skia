@@ -60,7 +60,5 @@ export const SkottieAnimations = () => {
     [progressValue]
   );
 
-  return (
-    <SkiaView mode="continuous" style={{ width, height }} onDraw={onDraw} />
-  );
+  return <SkiaView style={{ width, height }} onDraw={onDraw} />;
 };
