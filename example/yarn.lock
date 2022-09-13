@@ -2008,6 +2008,10 @@
   dependencies:
     nanoid "^3.1.23"
 
+"@shopify/react-native-skia-skottie@link:../packages/react-native-skia-skottie":
+  version "0.0.0"
+  uid ""
+
 "@shopify/react-native-skia@link:../package":
   version "0.0.0"
   uid ""

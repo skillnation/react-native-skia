@@ -17,6 +17,7 @@
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "@shopify/react-native-skia": "link:../package/",
+    "@shopify/react-native-skia-skottie": "link:../packages/react-native-skia-skottie",
     "@svgr/webpack": "^6.2.1",
     "cdt2d": "^1.0.0",
     "color": "^4.2.1",
