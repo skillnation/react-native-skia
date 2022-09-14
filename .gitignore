@@ -45,6 +45,7 @@ local.properties
 libs
 package/cpp/skia/include/
 package/cpp/skia/modules/
+packages/react-native-skia-skottie/cpp/skia/modules
 
 # BUCK
 buck-out/

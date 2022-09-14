@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "copy-skia-headers": "yarn rimraf ./cpp/skia/modules/ && mkdir -p ./cpp/skia/modules/skottie/include && mkdir -p ./cpp/skia/modules/skottie/src/text && cp -a ../../externals/skia/modules/skottie/include/. ./cpp/skia/modules/skottie/include && cp ../../externals/skia/modules/skottie/src/text/SkottieShaper.h ./cpp/skia/modules/skottie/src/text/SkottieShaper.h"
+  },
   "peerDependencies": {
     "@shopify/react-native-skia": "*",
     "react": ">=16.8.1",
@@ -10,6 +13,7 @@
   },
   "devDependencies": {
     "@shopify/react-native-skia": "^0.1.146",
-    "react-native": "0.68.0"
+    "react-native": "0.68.0",
+    "rimraf": "^3.0.2"
   }
 }
