@@ -51,8 +51,9 @@ namespace RNSkia {
         /**
           Constructor
         */
-        JsiSkSkottie(const sk_sp<skottie::Animation> animation)
-                : JsiSkWrappingSkPtrHostObject<skottie::Animation>(nullptr, std::move(animation)) {}
+        JsiSkSkottie(std::shared_ptr<RNSkPlatformContext> context,
+                     const sk_sp<skottie::Animation> animation)
+                : JsiSkWrappingSkPtrHostObject<skottie::Animation>(std::move(context), std::move(animation)) {}
 
         /**
           Returns the jsi object from a host object of this type
@@ -71,7 +72,7 @@ namespace RNSkia {
          * @return A function for creating a new host object wrapper for the JsiSkSkottie class.
          */
         static const jsi::HostFunctionType
-        createCtor() {
+        createCtor(std::shared_ptr<RNSkPlatformContext> context) {
             return JSI_HOST_FUNCTION_LAMBDA {
                 auto jsonStr = arguments[0].asString(runtime).utf8(runtime);
                 auto animation = skottie::Animation::Builder()
@@ -79,7 +80,7 @@ namespace RNSkia {
 
                 // Return the newly constructed object
                 return jsi::Object::createFromHostObject(
-                        runtime, std::make_shared<JsiSkSkottie>(std::move(animation)));
+                        runtime, std::make_shared<JsiSkSkottie>(std::move(context), std::move(animation)));
             };
         }
     };

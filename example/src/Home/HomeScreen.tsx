@@ -1,9 +1,12 @@
 import React from "react";
-import { ScrollView } from "react-native";
+import { NativeModules, ScrollView } from "react-native";
 
 import { HomeScreenButton } from "./HomeScreenButton";
 
 export const HomeScreen = () => {
+  const test = NativeModules.RNSkiaSkottie.install();
+  console.log({ skottie: global.SkiaApi_SkottieCtor, test });
+
   return (
     <ScrollView>
       <HomeScreenButton title="API" description="API examples" route="API" />

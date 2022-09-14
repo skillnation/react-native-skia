@@ -1,15 +1,17 @@
 #pragma once
 
-#include "../../../node_modules/react-native/ReactCommon/jsi/jsi/jsi.h"
+#include <jsi/jsi.h>
+#include <RNSkPlatformContext.h>
 
 namespace RNSkia {
     using namespace facebook;
 
     class RNSkSkottieModuleManager {
     public:
-        static void installBindings(jsi::Runtime *jsRuntime);
+        static void installBindings(jsi::Runtime *jsRuntime, std::shared_ptr<RNSkPlatformContext> platformContext);
     private:
 
         jsi::Runtime *_jsRuntime;
+        std::shared_ptr<RNSkPlatformContext> platformContext;
     };
 }

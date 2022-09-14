@@ -7,7 +7,8 @@ namespace RNSkia {
     using namespace facebook;
 
     void RNSkSkottieModuleManager::installBindings(
-            jsi::Runtime *jsRuntime
+            jsi::Runtime *jsRuntime,
+            std::shared_ptr<RNSkPlatformContext> platformContext
     ) {
         // Install bindings
         auto createSkottie = JsiSkSkottie::createCtor();
