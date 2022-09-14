@@ -3,6 +3,7 @@ package com.shopify.reactnative.skiaskottie;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
@@ -14,12 +15,10 @@ public class RNSkiaSkottieModule extends ReactContextBaseJavaModule {
     public static final String NAME = "RNSkiaSkottie";
 
     private final WeakReference<ReactApplicationContext> weakReactContext;
-    // private SkiaManager skiaManager;
 
     public RNSkiaSkottieModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.weakReactContext = new WeakReference<>(reactContext);
-//        reactContext.addLifecycleEventListener(this);
     }
 
     @Override
@@ -36,11 +35,13 @@ public class RNSkiaSkottieModule extends ReactContextBaseJavaModule {
                 Log.e(NAME, "React Application Context was null!");
                 return false;
             }
-            // skiaManager = new SkiaManager(context);
+            initialize(context.getJavaScriptContextHolder().get(), context);
             return true;
         } catch (Exception exception) {
-            Log.e(NAME, "Failed to initialize Skia Manager!", exception);
+            Log.e(NAME, "Failed to initialize Skia Skottie!", exception);
             return false;
         }
     }
+
+    public static native void initialize(long jsiPtr, ReactContext context);
 }

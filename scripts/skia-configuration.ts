@@ -95,6 +95,10 @@ export const configurations: Configuration = {
         name: "libskottie.a",
         outputRoot: "packages/react-native-skia-skottie/libs/android",
       },
+      {
+        name: "libsksg.a",
+        outputRoot: "packages/react-native-skia-skottie/libs/android",
+      },
     ],
   },
   ios: {
