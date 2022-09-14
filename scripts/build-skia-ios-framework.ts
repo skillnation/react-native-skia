@@ -19,7 +19,7 @@ console.log("Checking prerequisites...");
 
 // Check deps
 Object.keys(configurations.ios.targets).forEach((targetKey) => {
-  configurations.ios.outputNames.forEach((out) => {
+  configurations.ios.outputs.forEach((out) => {
     checkFileExists(
       `package/libs/ios/${targetKey}/${out}`,
       `package/libs/ios/${targetKey}/${out}`,
@@ -33,7 +33,7 @@ console.log("Prerequisites met. Starting build.");
 console.log("");
 
 console.log("Building fat binary for iphone simulator");
-configurations.ios.outputNames.forEach((out) => {
+configurations.ios.outputs.forEach(({ name: out }) => {
   console.log(`Building fat binary for simulator for file ${out}`);
   executeCmdSync(
     `lipo -create package/libs/ios/x64/${out} package/libs/ios/arm64-iphonesimulator/${out} -output package/libs/ios/${
@@ -45,7 +45,7 @@ configurations.ios.outputNames.forEach((out) => {
 console.log("");
 console.log("Building xcframeworks...");
 
-configurations.ios.outputNames.forEach((out) => {
+configurations.ios.outputs.forEach(({ name: out }) => {
   const libName = out.split(".")[0];
   console.log(`Building ${libName}.xcframework`);
   executeCmdSync(`rm -rf ./package/libs/ios/${libName}.xcframework`);

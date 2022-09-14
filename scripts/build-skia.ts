@@ -159,23 +159,29 @@ const processOutput = (platformName: PlatformName, targetName: string) => {
   const source = getOutDir(platformName, targetName);
   const configuration = configurations[platformName];
   if (configuration) {
-    const libNames = configuration.outputNames;
-    let targetDir = `${currentDir}/${configurations[platformName].outputRoot}/${targetName}`;
-    // Check if we have any output mappings here
-    const target = configuration.targets[targetName];
-    if (target.output) {
-      targetDir = `${currentDir}/${configurations[platformName].outputRoot}/${target.output}`;
-    }
+    const getTargetDir = (
+      outputDir = configurations[platformName].defaultOutputRoot
+    ) => {
+      let targetDir = `${currentDir}/${outputDir}/${targetName}`;
+      // Check if we have any output mappings here
+      const target = configuration.targets[targetName];
+      if (target.output) {
+        targetDir = `${currentDir}/${outputDir}/${target.output}`;
+      }
+      return targetDir;
+    };
 
-    if (!fs.existsSync(targetDir)) {
-      console.log(`Creating directory '${targetDir}'...`);
-      fs.mkdirSync(targetDir + "/", { recursive: true });
-    }
+    configuration.outputs.forEach(({ name, outputRoot }) => {
+      const targetDir = getTargetDir(outputRoot);
 
-    libNames.forEach((libName) => {
-      console.log(`Copying ${source}/${libName} to ${targetDir}/`);
-      console.log(`cp ${source}/${libName} ${targetDir}/.`);
-      executeCmdSync(`cp ${source}/${libName} ${targetDir}/.`);
+      if (!fs.existsSync(targetDir)) {
+        console.log(`Creating directory '${targetDir}'...`);
+        fs.mkdirSync(targetDir + "/", { recursive: true });
+      }
+
+      console.log(`Copying ${source}/${name} to ${targetDir}/`);
+      console.log(`cp ${source}/${name} ${targetDir}/.`);
+      executeCmdSync(`cp ${source}/${name} ${targetDir}/.`);
     });
   } else {
     throw new Error(

@@ -13,7 +13,7 @@ export const commonArgs = [
   ["skia_use_system_zlib", false],
   ["skia_enable_tools", false],
   ["is_official_build", true],
-  ["skia_enable_skottie", false],
+  ["skia_enable_skottie", true],
   ["is_debug", false],
   ["skia_enable_pdf", false],
   ["skia_enable_flutter_defines", true],
@@ -47,8 +47,11 @@ export type Configuration = { [K in PlatformName]: Platform };
 export type Platform = {
   targets: { [key: string]: Target };
   args: Arg[];
-  outputRoot: string;
-  outputNames: string[];
+  defaultOutputRoot: string;
+  outputs: {
+    name: string;
+    outputRoot?: string;
+  }[];
   options?: Arg[];
 };
 
@@ -83,8 +86,16 @@ export const configurations: Configuration = {
         '["-DSKIA_C_DLL", "-DHAVE_SYSCALL_GETRANDOM", "-DXML_DEV_URANDOM"]',
       ],
     ],
-    outputRoot: "package/libs/android",
-    outputNames: ["libskia.a", "libskshaper.a", "libsvg.a"],
+    defaultOutputRoot: "package/libs/android",
+    outputs: [
+      { name: "libskia.a" },
+      { name: "libskshaper.a" },
+      { name: "libsvg.a" },
+      {
+        name: "libskottie.a",
+        outputRoot: "packages/react-native-skia-skottie/libs/android",
+      },
+    ],
   },
   ios: {
     targets: {
@@ -142,7 +153,11 @@ export const configurations: Configuration = {
       ["cc", '"clang"'],
       ["cxx", '"clang++"'],
     ],
-    outputRoot: "package/libs/ios",
-    outputNames: ["libskia.a", "libskshaper.a", "libsvg.a"],
+    defaultOutputRoot: "package/libs/ios",
+    outputs: [
+      { name: "libskia.a" },
+      { name: "libskshaper.a" },
+      { name: "libsvg.a" },
+    ],
   },
 };
